@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Navigation from '../components/navigation';
 
 export default function About() {
   return (
@@ -7,7 +8,7 @@ export default function About() {
         <title>About</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
+      <Navigation />
       <main>
         <h1>
          About
