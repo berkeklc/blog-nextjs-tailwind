@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import {format, parseISO, add} from 'date-fns'
-import { blogPosts } from '../lib/data'
+import { blogPosts } from '../../lib/data';
 const turkishLocale = require('date-fns/locale/tr');
 
 export default function BlogPage({ title, date, content}) {
