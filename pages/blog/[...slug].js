@@ -5,14 +5,34 @@ import { getMdxNode, getMdxPaths } from "next-mdx/server"
 import { useHydrate } from "next-mdx/client"
 import { mdxComponents } from "../../components/mdx-components"
 import { useAuth0 } from "@auth0/auth0-react";
+import {useState, useEffect} from "react"
 const turkishLocale = require('date-fns/locale/tr');
 
 export default function BlogPage({ post }) {
-  const { loginWithRedirect, isAuthenticated, user, logout } = useAuth0();
+  const { loginWithRedirect, isAuthenticated, user, logout, getAccessTokenSilently } = useAuth0();
+  const [text, textSet] = useState("")
+  const [url, urlSet] = useState(null)
+  useEffect(() => {
+const url = window.location.origin + window.location.pathname
+urlSet(url)
+  }, [])
   const content = useHydrate(post, {
     components: mdxComponents,
   })
-  return (
+  const onSubmit = async (e) => {
+    e.preventDefault()
+const userToken = await getAccessTokenSilently()
+    const response = await fetch('/api/comment', {
+      method: 'POST',
+      body: JSON.stringify({ text, userToken, url }),
+      headers:  {
+        "Content-Type": 'application/json'
+      }
+    }) 
+    const data = await response.json()
+    console.log(data)
+  }
+  return ( 
     <div>
       <Head>
         <title>{post.frontMatter.title}</title>
@@ -30,8 +50,8 @@ export default function BlogPage({ post }) {
       </article>
 
       <div className="mx-auto prose  lg:prose-xl">
-        <form  className="mt-10">
-        <textarea rows="2" className="border w-full block px-2 py-1" />
+        <form onSubmit={onSubmit} className="mt-10">
+        <textarea rows="2" className="border w-full block px-2 py-1" onChange={(e) =>textSet(e.target.value)} />
         <div className="">
         {isAuthenticated ? 
             (
