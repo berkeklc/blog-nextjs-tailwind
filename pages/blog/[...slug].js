@@ -4,9 +4,11 @@ import Navigation from '../../components/navigation';
 import { getMdxNode, getMdxPaths } from "next-mdx/server"
 import { useHydrate } from "next-mdx/client"
 import { mdxComponents } from "../../components/mdx-components"
+import { useAuth0 } from "@auth0/auth0-react";
 const turkishLocale = require('date-fns/locale/tr');
 
 export default function BlogPage({ post }) {
+  const { loginWithRedirect, isAuthenticated, user, logout } = useAuth0();
   const content = useHydrate(post, {
     components: mdxComponents,
   })
@@ -27,6 +29,26 @@ export default function BlogPage({ post }) {
         <div>{content}</div>
       </article>
 
+      <div className="mx-auto prose  lg:prose-xl">
+        <form  className="mt-10">
+        <textarea rows="2" className="border w-full block px-2 py-1" />
+        <div className="">
+        {isAuthenticated ? 
+            (
+            <div>
+             <div className=" flex items-center space-x-2">
+               <button className="btn1">Gönder</button>
+                <img src={user.picture} width={30} className="rounded-full" />
+                <span>{user.name}</span>
+                <button typeof="button" className="btn1" onClick={() => logout({returnTo: process.env.NEXT_PUBLIC_URL + '/blog'})}>Çıkış Yap</button> 
+              </div>
+            </div>
+            )
+            :
+            (<button typeof="button" className="btn1" onClick={() => loginWithRedirect()}>Giriş Yap</button> )}
+        </div>
+       </form>
+      </div>
     </div>
   );
 }

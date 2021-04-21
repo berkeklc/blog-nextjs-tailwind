@@ -1,9 +1,15 @@
 import Link from 'next/link'
 import { ThemeProvider } from 'next-themes'
+import { Auth0Provider } from "@auth0/auth0-react";
 import '../styles/globals.css'
 
 function MyApp({ Component, pageProps }) {
   return (
+    <Auth0Provider
+    domain="berke.eu.auth0.com"
+    clientId={process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID}
+    redirectUri={process.env.NEXT_PUBLIC_URL}
+  >
     <div className="mx-auto my-8 w-9/12 antialiased ">
    
     <ThemeProvider forcedTheme={Component.theme || undefined} attribute="class">
@@ -17,6 +23,7 @@ function MyApp({ Component, pageProps }) {
         </Link>
       </footer>
     </div>
+    </Auth0Provider>
   )
 }
 
