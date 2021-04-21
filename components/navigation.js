@@ -17,13 +17,13 @@ export default function Navigation() {
       <nav className="my-4">
           <ul className="flex flex-row justify-center space-x-4 items-center">
             <li>
-              <Link href="/">
-                <a>Haberiniz var mı ?</a> 
+              <Link href="/about">
+                <a>Hakkımda</a> 
               </Link>
             </li>
             <li>
-              <Link href="/about">
-                <a>Hakkımda</a> 
+              <Link href="/blog">
+                <a>Blog</a> 
               </Link>
             </li>
             <li>

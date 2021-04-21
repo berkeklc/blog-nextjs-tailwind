@@ -9,3 +9,11 @@
     }
     
 }
+
+@layer components {
+
+    .btn1 {
+       @apply  text-white rounded-sm bg-blue-800 hover:text-white hover:bg-blue-900 p-2;
+    }
+    
+}
