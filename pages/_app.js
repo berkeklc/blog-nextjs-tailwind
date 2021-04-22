@@ -6,9 +6,9 @@ import '../styles/globals.css'
 function MyApp({ Component, pageProps }) {
   return (
     <Auth0Provider
-    domain="berke.eu.auth0.com"
     clientId={process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID}
-    redirectUri={process.env.NEXT_PUBLIC_URL}
+    domain={process.env.NEXT_PUBLIC_AUTH0_DOMAIN}
+    redirectUri={process.env.API_URL}
   >
     <div className="mx-auto my-8 w-9/12 antialiased ">
    
