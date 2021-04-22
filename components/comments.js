@@ -5,7 +5,7 @@ export default function Comments ({ comments }) {
         <div className="mt-10 space-y-4">
         {comments.map(({ id, createdAt, text, user}) => { 
           return (
-           
+
               <div key={id} className="flex items-center space-x-2">
                 <img src={user.picture} alt={user.name} width={40} className="rounded-full" />
                 <div>
@@ -16,9 +16,9 @@ export default function Comments ({ comments }) {
                 <p>{text}</p>
               </div>
               </div>
-             
-          
+
+
          ) })}
       </div>
     )
-}
+} 

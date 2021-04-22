@@ -21,4 +21,4 @@ export default function Form({ onSubmit, text, textSet }) {
         </div>
        </form>
     )
-}
+} 

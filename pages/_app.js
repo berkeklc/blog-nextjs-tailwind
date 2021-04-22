@@ -8,7 +8,7 @@ function MyApp({ Component, pageProps }) {
     <Auth0Provider
     clientId={process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID}
     domain={process.env.NEXT_PUBLIC_AUTH0_DOMAIN}
-    redirectUri={process.env.API_URL}
+    redirectUri={process.env.NEXT_PUBLIC_URL}
   >
     <div className="mx-auto my-8 w-9/12 antialiased ">
    
