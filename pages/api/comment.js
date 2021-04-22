@@ -1,60 +1,52 @@
-import redis from '@lib/redis'
 import { nanoid } from 'nanoid'
+import Redis from 'ioredis'
 
-export default async (req, res) => {
+export default async function handler(req, res) {
+  // CREATE
+  if (req.method === 'POST') {
+    const { url, userToken, text } = req.body
+
+    if (!url || !userToken || !text)
+      return res.status(400).json({ message: 'parametreler eksik veya hatalı' })
+
+    const userResponse = await fetch(
+      `https://berke.eu.auth0.com/userinfo`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userToken}`
+        }
+      }
+    )
+    const user = await userResponse.json()
+
+    const comment = {
+      id: nanoid(),
+      createdAt: Date.now(),
+      text,
+      user: {
+        name: user.name,
+        picture: user.picture
+      }
+    }
+
+    let redis = new Redis(process.env.REDIS_URL)
+    redis.lpush(url, JSON.stringify(comment))
+    redis.quit()
+
+    res.status(200).json(comment)
+  }
+
+  // FETCH
   if (req.method === 'GET') {
     const { url } = req.query
 
-    if (!url) {
-      return res.status(400).send('Invalid paramaters')
-    }
+    let redis = new Redis(process.env.REDIS_URL)
+    const comments = await redis.lrange(url, 0, -1)
+    redis.quit()
 
-    try {
-      const response = await redis.lrange(url, 0, -1)
-      const comments = response.map((comment) => JSON.parse(comment))
-      return res.status(200).json(comments)
-    } catch (err) {
-      return res.status(400).json({ error: err.message })
-    }
+    const data = comments.map((o) => JSON.parse(o))
+
+    res.status(200).json(data)
   }
-
-  if (req.method === 'POST') {
-    const { token, text, url } = req.body
-
-    if (!token) {
-      return res.status(403).send('Unauthorized')
-    }
-    if (!text || !url) {
-      return res.status(400).send('Invalid paramaters')
-    }
-
-    try {
-      const response = await fetch(
-        `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/userinfo`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        }
-      )
-      const { name, picture } = await response.json()
-
-      const newComment = {
-        id: nanoid(),
-        created_at: Date.now(),
-        text,
-        name,
-        picture,
-        url
-      }
-
-      await redis.lpush(url, JSON.stringify(newComment))
-      return res.status(200).json(newComment)
-    } catch (err) {
-      return res.status(400).json({ error: err.message })
-    }
-  }
-
-  return res.send('Method not allowed.')
 }
