@@ -10,7 +10,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ message: 'parametreler eksik veya hatalı' })
 
     const userResponse = await fetch(
-      `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/userinfo`,
+      `https://berke.eu.auth0.com/userinfo`,
       {
         headers: {
           'Content-Type': 'application/json',

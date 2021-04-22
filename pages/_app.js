@@ -6,7 +6,7 @@ import '../styles/globals.css'
 function MyApp({ Component, pageProps }) {
   return (
     <Auth0Provider
-    domain={process.env.NEXT_PUBLIC_AUTH0_DOMAIN}
+    domain="berke.eu.auth0.com"
     clientId={process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID}
     redirectUri={process.env.NEXT_PUBLIC_URL}
   >
